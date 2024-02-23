@@ -1,25 +1,42 @@
 <script setup lang="ts">
 import Card from "../components/Card.vue";
 import HeadPic from "../components/HeadPic.vue";
+import OtherPlayer from "../components/OtherPlayer.vue";
+import { Icon } from "vant";
 </script>
 
 <template>
     <div class="container">
         <div class="head-area">
-            <span class="area-name">公牌</span>
-            <Card type="spade" number="A" />
-            <Card type="club" number="8" />
-            <Card type="heart" number="10" />
-            <Card type="heart" number="J" />
-            <Card type="heart" number="Q" />
+            <div class="common-cards">
+                <span class="area-name">公牌</span>
+                <Card type="spade" number="A" />
+                <Card type="club" number="8" />
+                <Card type="heart" number="10" />
+                <Card type="heart" number="J" />
+                <Card type="heart" number="Q" />
+            </div>
+            <div class="settings">
+                <Icon name="setting-o" color="#000000" size="8vw" />
+            </div>
         </div>
-        <div class="main-area"></div>
-        <HeadPic />
+        <div class="main-area">
+            <OtherPlayer />
+        </div>
+        <div class="my-detail">
+            <HeadPic name="我" />
+            <div class="my-chip">我的剩余筹码:1000</div>
+        </div>
         <div class="my-area">
             <div class="my-cards">
                 <span class="area-name">手牌</span>
                 <Card type="heart" number="A" />
                 <Card type="heart" number="K" />
+            </div>
+            <div class="my-options">
+                <div class="option-button">check!</div>
+                <div class="option-button">下注</div>
+                <div class="option-button">弃牌</div>
             </div>
         </div>
     </div>
@@ -37,8 +54,19 @@ import HeadPic from "../components/HeadPic.vue";
         height: 160px;
         display: flex;
         align-items: center;
-        padding-left: 10px;
         border-bottom: 4px solid #000000;
+        .common-cards {
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            border-right: 4px solid #000000;
+        }
+        .settings {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     }
     .area-name {
         width: 48px;
@@ -49,17 +77,44 @@ import HeadPic from "../components/HeadPic.vue";
     }
     .main-area {
         flex: 1;
+        padding: 20px 0;
+    }
+    .my-detail {
+        display: flex;
+        align-items: baseline;
+        border-top: 4px solid #000000;
+        .my-chip {
+            font-size: 32px;
+            color: #000000;
+        }
     }
     .my-area {
         height: 160px;
         display: flex;
         align-items: center;
         padding-left: 10px;
-        border-top: 4px solid #000000;
         .my-cards {
             display: flex;
             align-items: center;
             border-right: 4px solid #000000;
+        }
+        .my-options {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            .option-button {
+                width: 120px;
+                line-height: 80px;
+                font-size: 32px;
+                color: #000000;
+                text-align: center;
+                border: 4px solid #000000;
+                border-radius: 8px;
+                &:active {
+                    background-color: #000000;
+                }
+            }
         }
     }
 }

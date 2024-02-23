@@ -4,7 +4,7 @@ import HeadPic from './HeadPic.vue';
 
 <template>
     <div class="other-player">
-        <HeadPic />
+        <HeadPic name="牛" />
     </div>
 </template>
 

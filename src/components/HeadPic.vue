@@ -1,7 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps<{
+    name: string;
+}>();
+</script>
 
 <template>
-    <span class="head-pic">我</span>
+    <span class="head-pic">{{ name }}</span>
 </template>
 
 <style scoped lang="less">
