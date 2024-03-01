@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "less": "^4.2.0",
+    "pinia": "^2.1.7",
     "postcss": "^8.4.35",
     "postcss-loader": "^8.1.0",
     "postcss-px-to-viewport": "^1.1.1",
