@@ -16,6 +16,7 @@
     "postcss-px-to-viewport": "^1.1.1",
     "ts-node": "^10.9.2",
     "vant": "^4.8.4",
+    "vconsole": "^3.15.1",
     "vue": "^3.4.15",
     "vue-router": "^4.3.0"
   },
