@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
+import login from "../api/login";
 
 const router = useRouter();
 
-const enterGame = () => router.push("GameTable")
+const enterGame = () => {
+    const pin = new Date().getTime();
+    login({
+        userId: pin,
+    }).then(res => {
+        if (res.code === "0") {
+            router.push("/GameTable");
+        }
+    });
+};
 </script>
 
 <template>
