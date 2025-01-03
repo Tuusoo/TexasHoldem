@@ -3,6 +3,21 @@ import Card from "../components/Card.vue";
 import HeadPic from "../components/HeadPic.vue";
 import OtherPlayer from "../components/OtherPlayer.vue";
 import { Icon } from "vant";
+import api from "../api/index";
+
+const heartBeatConnect = () => {
+    const pin = localStorage.getItem("userId") as string;
+    api({
+        uri: "heartBeat",
+        parameter: {
+            userId: pin,
+        },
+    }).then(res => {
+        console.log(res);
+    });
+};
+
+heartBeatConnect();
 </script>
 
 <template>

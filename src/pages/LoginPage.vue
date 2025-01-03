@@ -1,15 +1,31 @@
 <script setup lang="ts">
+import { v4 as uuid } from "uuid";
+import { onMounted } from "vue";
 import { useRouter } from "vue-router";
+import api from "../api/index";
 import login from "../api/login";
 
-const router = useRouter();
+onMounted(() => {
+    api({
+        uri: "currentPlayersNum",
+    }).then(res => {
+        console.log(res);
+    })
+});
 
+const router = useRouter();
 const enterGame = () => {
-    const pin = new Date().getTime();
+    let pin: string;
+    if (localStorage.getItem("userId")) {
+        pin = localStorage.getItem("userId") as string;
+    } else {
+        pin = uuid();
+    }
     login({
         userId: pin,
     }).then(res => {
         if (res.code === "0") {
+            localStorage.setItem("userId", pin);
             router.push("/GameTable");
         }
     });
