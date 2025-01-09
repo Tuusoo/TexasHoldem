@@ -1,34 +1,32 @@
 <script setup lang="ts">
-import { v4 as uuid } from "uuid";
-import { onMounted } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import api from "../api/index";
-import login from "../api/login";
 
-onMounted(() => {
+const currentPlayersNum = ref(0);
+const timer = ref();
+const getCurrentPlayersNum = () => {
     api({
         uri: "currentPlayersNum",
     }).then(res => {
-        console.log(res);
-    })
+        currentPlayersNum.value = Number(res.msg);
+    });
+};
+
+onMounted(() => {
+    getCurrentPlayersNum();
+    timer.value = setInterval(() => {
+        getCurrentPlayersNum();
+    }, 5000);
+});
+
+onUnmounted(() => {
+    clearInterval(timer.value);
 });
 
 const router = useRouter();
 const enterGame = () => {
-    let pin: string;
-    if (localStorage.getItem("userId")) {
-        pin = localStorage.getItem("userId") as string;
-    } else {
-        pin = uuid();
-    }
-    login({
-        userId: pin,
-    }).then(res => {
-        if (res.code === "0") {
-            localStorage.setItem("userId", pin);
-            router.push("/GameTable");
-        }
-    });
+    router.push("/GameTable");
 };
 </script>
 
@@ -37,7 +35,7 @@ const enterGame = () => {
         <div class="head-1">PLAY德州扑克</div>
         <div class="head-2">♠♥♣♦</div>
         <div class="enter-button" @click="enterGame">进 入</div>
-        <div class="notice-text">当前人数：0</div>
+        <div class="notice-text">当前人数：{{ currentPlayersNum }}</div>
     </div>
 </template>
 
