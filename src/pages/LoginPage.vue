@@ -1,28 +1,8 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
-import api from "../api/index";
 
 const currentPlayersNum = ref(0);
-const timer = ref();
-const getCurrentPlayersNum = () => {
-    api({
-        uri: "currentPlayersNum",
-    }).then(res => {
-        currentPlayersNum.value = Number(res.msg);
-    });
-};
-
-onMounted(() => {
-    getCurrentPlayersNum();
-    timer.value = setInterval(() => {
-        getCurrentPlayersNum();
-    }, 5000);
-});
-
-onUnmounted(() => {
-    clearInterval(timer.value);
-});
 
 const router = useRouter();
 const enterGame = () => {
