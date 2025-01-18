@@ -1,11 +1,42 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { inject, Ref, ref } from "vue";
 import { useRouter } from "vue-router";
+import { v4 as uuid } from "uuid";
+import { showFailToast } from "vant";
+import WebSocketService from "../ws";
+import api from "../api";
+import useStore from "../store";
 
+const store = useStore();
+// 玩家人数
 const currentPlayersNum = ref(0);
+api({ uri: "currentPlayersNum" }).then(res => {
+    currentPlayersNum.value = Number(res.msg);
+});
 
 const router = useRouter();
+const wsService = WebSocketService.getInstance();
+const ws = wsService.getWebSocket();
+const timer: Ref<NodeJS.Timeout> = inject("timer") as Ref<NodeJS.Timeout>;
 const enterGame = () => {
+    // 心跳检测
+    let pin: string;
+    if (localStorage.getItem("userId")) {
+        pin = localStorage.getItem("userId") as string;
+    } else {
+        pin = uuid();
+    }
+    localStorage.setItem("userId", pin);
+    store.setId(pin);
+    wsService.send({ type: "login", data: pin });
+    timer.value = setInterval(() => {
+        wsService.send({ type: "ping", data: pin });
+        if (ws?.readyState !== 1) {
+            showFailToast("似乎连接已断开");
+            clearInterval(timer.value);
+        }
+    }, 5000);
+    store.addLog("我进入了游戏");
     router.push("/GameTable");
 };
 </script>

@@ -1,4 +1,4 @@
-// websocket.ts
+import useStore from "../store";
 
 class WebSocketService {
     private static instance: WebSocketService;
@@ -35,13 +35,11 @@ class WebSocketService {
         this.url = url;
         this.ws = new WebSocket(url);
 
-        this.ws.onopen = () => {
-            console.log("WebSocket connected");
-        };
-
         this.ws.onmessage = (event: MessageEvent) => {
-            console.log("Message received:", event.data);
-            // 可在这里触发事件或回调
+            const store = useStore();
+            const { type } = JSON.parse(event.data);
+            if (type === "pong") return;
+            store.setWs(JSON.parse(event.data));
         };
 
         this.ws.onclose = (event: CloseEvent) => {
@@ -60,9 +58,9 @@ class WebSocketService {
      * 发送消息
      * @param message 要发送的消息
      */
-    public send(message: string): void {
+    public send(message: object): void {
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            this.ws.send(message);
+            this.ws.send(JSON.stringify(message));
         } else {
             console.error("WebSocket is not open");
         }

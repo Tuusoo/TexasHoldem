@@ -1,11 +1,13 @@
+import "vant/lib/index.css";
+// import VConsole from "vconsole";
 import { createApp } from "vue";
-import "./style.less";
 import App from "./App.vue";
 import router from "./router";
-import "vant/lib/icon/style/index";
-import VConsole from "vconsole";
-import "vant/lib/index.css";
+import "./style.less";
+import { createPinia } from "pinia";
 
-const vconsole = new VConsole();
+const pinia = createPinia();
 
-createApp(App).use(router).mount("#app");
+// const vconsole = new VConsole();
+
+createApp(App).use(router).use(pinia).mount("#app");
