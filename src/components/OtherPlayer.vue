@@ -22,7 +22,7 @@ watch(
 
 <template>
     <div class="other-player">
-        <HeadPic :name="data.name" />
+        <HeadPic :name="data.name" :is-dealer="data.id === store.dealer" />
         <Icon name="success" v-if="data.ready" color="#07c160" size="8vw" />
     </div>
 </template>

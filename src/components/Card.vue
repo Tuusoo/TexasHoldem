@@ -5,11 +5,11 @@ import club from "../assets/club.svg";
 import diamond from "../assets/diamond.svg";
 
 defineProps<{
-    type: cardType;
-    number: cardNum;
+    type: cardSuit;
+    number: cardRank;
 }>();
 
-const getCardColor = (type: cardType) => {
+const getCardColor = (type: cardSuit) => {
     switch (type) {
         case "spade":
         case "club":
@@ -19,7 +19,7 @@ const getCardColor = (type: cardType) => {
             return "#d81e06";
     }
 };
-const getCardIcon = (type: cardType) => {
+const getCardIcon = (type: cardSuit) => {
     switch (type) {
         case "spade":
             return spade;

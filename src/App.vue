@@ -14,7 +14,8 @@ provide("timer", timer);
 
 const show = ref(false);
 const wsService = WebSocketService.getInstance();
-wsService.connect("ws://192.168.0.44:3000/ws");
+const hostname = window.location.hostname;
+wsService.connect(`ws://${hostname}:3000/ws`);
 const ws = wsService.getWebSocket();
 (ws as WebSocket).onopen = () => {
     show.value = true;

@@ -1,22 +1,14 @@
 // 卡片花色
-type cardType = "spade" | "heart" | "club" | "diamond";
+type cardSuit = "spade" | "heart" | "club" | "diamond";
 
 // 扑克的数字
-type cardNum =
-    | "A"
-    | "1"
-    | "2"
-    | "3"
-    | "4"
-    | "5"
-    | "6"
-    | "7"
-    | "8"
-    | "9"
-    | "10"
-    | "J"
-    | "Q"
-    | "K";
+type cardRank = "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K" | "A";
+
+// 扑克牌
+type card = {
+    suit: cardSuit;
+    rank: cardRank;
+};
 
 // 请求返回报文
 type response = {
@@ -42,7 +34,7 @@ type playerInfo = {
 };
 
 // 游戏状态
-type gameState = "prepare" | "inGame" | "settling";
+type gameState = "waiting" | "round1" | "round2" | "round3" | "round4" | "settling";
 
 // 日志格式
 type log = {
