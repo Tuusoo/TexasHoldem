@@ -29,8 +29,22 @@ export const getLeftRightPlayers = (players: playerInfo[], myId: string) => {
     const rightHalfPlayers = anticlockwisePlayers
         .slice(0, Math.floor(anticlockwisePlayers.length / 2))
         .reverse();
-    const leftHalfPlayers = anticlockwisePlayers.slice(
-        Math.floor(anticlockwisePlayers.length / 2)
-    );
+    const leftHalfPlayers = anticlockwisePlayers.slice(Math.floor(anticlockwisePlayers.length / 2));
     return [leftHalfPlayers, rightHalfPlayers];
+};
+
+// 牌种类转换成emoji
+export const changeToEmoji = (suit: cardSuit) => {
+    switch (suit) {
+        case "heart":
+            return "♥️";
+        case "diamond":
+            return "♦️";
+        case "club":
+            return "♣️";
+        case "spade":
+            return "♠️";
+        default:
+            return suit;
+    }
 };

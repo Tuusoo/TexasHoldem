@@ -2,11 +2,15 @@
 import { onMounted, provide, ref, watch } from "vue";
 import WebSocketService from "./ws";
 import useStore from "./store";
+import { allowMultipleToast, setToastDefaultOptions } from "vant";
 
 onMounted(() => {
     (document.getElementById("app") as HTMLElement).style.height =
         document.documentElement.clientHeight + "px";
 });
+
+allowMultipleToast();
+setToastDefaultOptions({ forbidClick: true });
 
 // 心跳检测定时器
 const timer = ref<NodeJS.Timeout>();

@@ -11,6 +11,7 @@ import useStore from "../store";
 import WebSocketService from "../ws";
 import Log from "../components/Log.vue";
 import BetPop from "../components/BetPop.vue";
+import { changeToEmoji } from "../utils/index.js";
 
 const store = useStore();
 const wsService = WebSocketService.getInstance();
@@ -21,6 +22,15 @@ watch(
         if (val.type === "gameStatus") {
             store.setGameState(val.data);
             store.setCurrentBiggestBet(0);
+            if (val.data === "round1") {
+                store.addLog("第一轮开始");
+            } else if (val.data === "round2") {
+                store.addLog("第二轮开始");
+            } else if (val.data === "round3") {
+                store.addLog("第三轮开始");
+            } else if (val.data === "round4") {
+                store.addLog("第四轮开始");
+            }
         }
         if (val.type === "gameStart") {
             store.addLog("所有玩家准备完成，游戏开始");
@@ -38,6 +48,7 @@ watch(
             }
             showToast(`玩家"${val.data.name}"下注了${val.data.bet}筹码`);
             store.addLog(`玩家"${val.data.name}"下注了${val.data.bet}筹码`);
+            store.addLog(`当前最大下注为${store.currentBiggestBet}筹码`);
         }
         if (val.type === "currentPlayer") {
             store.setCurrentPlayer(val.data);
@@ -66,6 +77,21 @@ watch(
         }
         if (val.type === "communityCards") {
             store.setCommonCards(val.data);
+        }
+        if (val.type === "winner") {
+            const winnerName = val.data.name.join("、");
+            val.data.cards
+                ? store.addLog(`玩家"${winnerName}"赢了，牌型为${val.data.cards}`)
+                : store.addLog(`玩家"${winnerName}"赢了`);
+        }
+        if (val.type === "gameResult") {
+            val.data.forEach((i: { id: string; name: string; cards: card[] }[], index: number) => {
+                store.addLog(
+                    `排名第${index + 1}：${i
+                        .map(j => j.name + " " + j.cards.map(k => changeToEmoji(k.suit) + k.rank))
+                        .join("，")}`
+                );
+            });
         }
     }
 );
@@ -194,7 +220,8 @@ const check = () => {
                     store.gameState === 'round1' ||
                     store.gameState === 'round2' ||
                     store.gameState === 'round3' ||
-                    store.gameState === 'round4'
+                    store.gameState === 'round4' ||
+                    store.gameState === 'settling'
                 "
             >
                 <div class="my-cards">
@@ -206,12 +233,21 @@ const check = () => {
                         :number="i.rank"
                     />
                 </div>
-                <div class="my-options" v-show="store.currentPlayer === store.id">
+                <div
+                    class="my-options"
+                    v-show="store.currentPlayer === store.id && store.gameState !== 'settling'"
+                >
                     <div class="option-button" v-if="store.gameState !== 'round1'" @click="check">
                         check!
                     </div>
                     <div class="option-button" @click="showBetPopup">下注</div>
                     <div class="option-button" @click="fold">放弃</div>
+                </div>
+                <div class="my-options" v-if="store.gameState === 'settling'">
+                    <div class="option-button" @click="handlePrepare" v-if="!store.myData?.ready">
+                        准备
+                    </div>
+                    <div class="notice" v-if="store.myData?.ready">已准备！</div>
                 </div>
             </template>
             <div class="notice" v-if="store.myData?.isFold">已弃牌！</div>
